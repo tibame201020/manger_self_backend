@@ -32,7 +32,26 @@ public class ItemController {
         String sub = Objects.toString(request.getAttribute("sub"));
         itemFormBean.setSub(sub);
         List<Item> itemList = itemService.getItemsByCategoryAndSubAndDateRange(itemFormBean);
-
         return itemList;
+    }
+
+    @RequestMapping("/delItem")
+    public boolean delItems(@RequestBody String id) {
+        try {
+            itemService.deleteItemById(id);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    @RequestMapping("/saveChangeItem")
+    public boolean saveChangeItem(@RequestBody Item item) {
+        try {
+            itemService.saveChangeItem(item);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }

@@ -8,11 +8,9 @@ import com.example.self_manager.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class ItemServiceImpl implements ItemService {
@@ -38,10 +36,35 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<Item> getItemsByCategoryAndSubAndDateRange(ItemFormBean itemFormBean) {
-        return itemRepo.findByCategoryAndSubAndDateBetweenOrderByDateDesc(
-                itemFormBean.getCategory(), itemFormBean.getSub(),
-                itemFormBean.getStartDate().replace("/", ""),
-                itemFormBean.getEndDate().replace("/", "")
-        );
+        if ("home".equalsIgnoreCase(itemFormBean.getCategory())) {
+            String sub = itemFormBean.getSub();
+            String start = itemFormBean.getStartDate().replace("/", "");
+            String end = itemFormBean.getEndDate().replace("/", "");
+            List<Item> itemList = new ArrayList<>();
+            itemList.addAll(itemRepo.findByCategoryAndSubAndDateBetweenOrderByDateDesc("account", sub, start, end));
+            itemList.addAll(itemRepo.findByCategoryAndSubAndDateBetweenOrderByDateDesc("eat", sub, start, end));
+            itemList.addAll(itemRepo.findByCategoryAndSubAndDateBetweenOrderByDateDesc("fit", sub, start, end));
+            itemList.addAll(itemRepo.findByCategoryAndSubAndDateBetweenOrderByDateDesc("note", sub, start, end));
+            return itemList;
+        } else {
+            return itemRepo.findByCategoryAndSubAndDateBetweenOrderByDateDesc(
+                    itemFormBean.getCategory(), itemFormBean.getSub(),
+                    itemFormBean.getStartDate().replace("/", ""),
+                    itemFormBean.getEndDate().replace("/", "")
+            );
+        }
+    }
+
+    @Override
+    public void deleteItemById(String id) {
+        itemRepo.deleteById(new Integer(id));
+    }
+
+    @Override
+    public void saveChangeItem(Item item) {
+        if ("note".equalsIgnoreCase(item.getCategory())) {
+            item.setItemValue(null);
+        }
+        itemRepo.save(item);
     }
 }
