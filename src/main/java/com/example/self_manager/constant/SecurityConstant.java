@@ -8,6 +8,7 @@ public class SecurityConstant {
     public static final String[] PASS_URLS =
             new String[] { WAKE_UP_URL, LOGIN_URL,GET_PARAM_URL , GET_TOKEN_URL };
     public static final String FRONT_END_URL = "https://tibame201020.github.io/manager_self";
+    public static final String FRONT_END_URL2 = "http://localhost:4200";
 
     public static final String VALID_SUCCESSFUL_MSG = "the token is valid";
     public static final String VALID_UNSUCCESSFUL_EXPIRED_MSG = "the token has Expired";
